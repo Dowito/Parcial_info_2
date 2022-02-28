@@ -1,4 +1,5 @@
 #include <iostream>
+#include <Auxiliar.h>
 using namespace std;
 
 void serial74HC595(unsigned char byte);
@@ -12,10 +13,18 @@ si mandamos 10000101 -> 10100001 en la memoria de dezplazamiento de guardan en o
 esto muy presente si se mandan de esta manera
 */
 
+bool pruebaDesencript(char caracter, char bandera);
+/*
+Programa que simula el proceso de identificar la informacion verdadera o false,
+recibe un numero (tipo char) y lo compara con la bandera.
+return True si son iguales, false de lo contrario
+*/
+
 int main()
 {
     unsigned char byte = 'a';
     serial74HC595(byte);
+    pruebaDesencript(32, 32);
     cout << "Hello World!" << endl;
     return 0;
 }
@@ -24,7 +33,6 @@ void serial74HC595(unsigned char byte){
     unsigned char bit;
     unsigned char relojShift;
     unsigned char relojStorage;
-    string prueba; //para hacer prueba de como quedarian guardados en la memoria de dezplazamiento
     for (short i=1; i<=8; i++) {
         bit = byte & 0b01;
         //ya que tenemos el bit a transferir, le indicamos al circuito que lo reciba activando el reloj de dezplazamiento
@@ -34,4 +42,20 @@ void serial74HC595(unsigned char byte){
     }
     relojStorage = 1;//liberamos los bits al exterior guardados en la memoria de dezplazamiento
     relojStorage = 0;
+}
+
+bool pruebaDesencript(char caracter, char bandera){
+    bool *bits = getBits(&caracter,1);
+    bool *bitsBandera = getBits(&bandera,1);
+    bool outXOR[8];
+    for (short i=0;i<8;i++) {
+        outXOR[i] = bits[i] ^ bitsBandera[i]; //Si todos los valores de outXOR son 0, los numeros son iguales
+    }
+    bool outOR;
+    outOR = outXOR[0];
+    for (short i=1;i<8;i++ ) {
+        outOR = outOR | outXOR[i]; //Comparamos todos los output de XOR usando OR, asi si el resultado es 0, eso quiere decir que son iguales.
+    }
+    bool resultado = !outOR; //negamos el resultado que nos dio antes, asi 1 sera que son iguales, 0 son distintos
+    return resultado;
 }

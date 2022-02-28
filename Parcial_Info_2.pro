@@ -4,4 +4,8 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
+        Auxiliar.cpp \
         main.cpp
+
+HEADERS += \
+    Auxiliar.h
