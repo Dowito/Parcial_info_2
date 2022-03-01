@@ -48,11 +48,13 @@ Espera señal de reloj para recibir dicho bit
 int main()
 {
     unsigned char byte = 'a';
+    unsigned char rBit;
     unsigned char arr2[] = {134,48,63,13,32,165,94};
     serial74HC595(byte);
     pruebaDesencript(32, 32);
     tArduino(arr2[0]);
     byte = rArduino(arr2[0]);
+    rBitArduino(rBit, 1);
     return 0;
 }
 
