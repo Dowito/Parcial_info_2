@@ -31,13 +31,28 @@ unsigned char rArduino(unsigned char lectura);
 Recibe un byte de manera serial
 */
 
+void tBitArduino(unsigned char tBit);
+/*
+tBit-> bit (0b00 o 0b01)
+Manda un bit a un arduino receptor
+*/
+
+void rBitArduino(unsigned char &rBit, unsigned char tBit);
+/*
+&rBit->Variable donde se guardara el bit por referencia
+tBit ->Solo funciona como ejemplo de la simulacion
+Recibe un bit por un puerto digital.
+Espera señal de reloj para recibir dicho bit
+*/
+
 int main()
 {
     unsigned char byte = 'a';
+    unsigned char arr2[] = {134,48,63,13,32,165,94};
     serial74HC595(byte);
     pruebaDesencript(32, 32);
-    byte = rArduino(1);
-    cout << "Hello World!" << endl;
+    tArduino(arr2[0]);
+    byte = rArduino(arr2[0]);
     return 0;
 }
 
@@ -112,4 +127,21 @@ unsigned char rArduino(unsigned char lectura)
             indx+=1;
         }
     }return byte;
+}
+
+void tBitArduino(unsigned char tBit)
+{
+    unsigned char reloj = 0;//El reloj siempre entrara estaando en 0
+    //digitalWrite(data,tBit); //se manda bit
+    reloj = 1;//digitalWrite(reloj,HIGH) Se manda señal para que el arduino receptor reciba el bit
+    reloj = 0;//digitalWrite(reloj,LOW)
+}
+
+void rBitArduino(unsigned char &rBit, unsigned char tBit)
+{
+    unsigned char reloj = 0;
+    while (reloj == 0){ //Se queda aqui hasta que recibe la señal de reloj
+        reloj = 1; //digitalRead(reloj)
+    }
+    rBit = tBit; //digiralRead(data)
 }
