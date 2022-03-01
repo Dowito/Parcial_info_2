@@ -20,6 +20,17 @@ recibe un numero (tipo char) y lo compara con la bandera.
 return True si son iguales, false de lo contrario
 */
 
+void tArduino(char byte);
+/*
+Transmision de un byte de un arduino a otro de forma serial
+Del bit mas al menos significativo
+*/
+
+unsigned char rArduino();
+/*
+Recibe un byte de manera serial
+*/
+
 int main()
 {
     unsigned char byte = 'a';
@@ -31,8 +42,8 @@ int main()
 
 void serial74HC595(unsigned char byte){
     unsigned char bit;
-    unsigned char relojShift;
-    unsigned char relojStorage;
+    unsigned char relojShift = 0;
+    unsigned char relojStorage = 0;
     for (short i=1; i<=8; i++) {
         bit = byte & 0b01;
         //ya que tenemos el bit a transferir, le indicamos al circuito que lo reciba activando el reloj de dezplazamiento
@@ -58,4 +69,40 @@ bool pruebaDesencript(char caracter, char bandera){
     }
     bool resultado = !outOR; //negamos el resultado que nos dio antes, asi 1 sera que son iguales, 0 son distintos
     return resultado;
+}
+
+void tArduino(char byte)
+{
+    unsigned char bit;
+    unsigned char reloj = 0;
+    for (short i=0; i<8; i++) {
+        bit = byte & 0b10000000; //Mandaremos del mas significativo al menos significativo
+        if (bit == 0b10000000){
+            cout << '1'; //bit = 0b01
+        }
+        else cout << '0'; //bit = 0b00
+        reloj = 1; //Mandamos una señal para avisarle al arduino receptor que debe de recibir un bit
+        reloj = 0;
+        //Delay para dar tiempo a que la informacion que se mando se procese bien
+    }
+ }
+
+unsigned char rArduino()
+{
+    unsigned char byte = 0;
+    unsigned char lecBit = 1;
+    unsigned char reloj= 0;
+    unsigned indx = 0;
+    if (indx<8) return byte;
+
+    else if (reloj == 0){
+
+    }
+
+    else if (reloj == 1){
+        //Leemos el bit -> 0b01 o 0b00 que esta llegando por el puerto digital
+        byte += lecBit;
+        byte = byte << 1;
+        indx+=1;
+    }
 }
