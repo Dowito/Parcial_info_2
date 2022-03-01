@@ -26,7 +26,7 @@ Transmision de un byte de un arduino a otro de forma serial
 Del bit mas al menos significativo
 */
 
-unsigned char rArduino();
+unsigned char rArduino(unsigned char lectura);
 /*
 Recibe un byte de manera serial
 */
@@ -36,6 +36,7 @@ int main()
     unsigned char byte = 'a';
     serial74HC595(byte);
     pruebaDesencript(32, 32);
+    byte = rArduino(1);
     cout << "Hello World!" << endl;
     return 0;
 }
@@ -77,6 +78,7 @@ void tArduino(char byte)
     unsigned char reloj = 0;
     for (short i=0; i<8; i++) {
         bit = byte & 0b10000000; //Mandaremos del mas significativo al menos significativo
+        byte = byte << 1;
         if (bit == 0b10000000){
             cout << '1'; //bit = 0b01
         }
@@ -87,22 +89,27 @@ void tArduino(char byte)
     }
  }
 
-unsigned char rArduino()
+unsigned char rArduino(unsigned char lectura)
 {
     unsigned char byte = 0;
     unsigned char lecBit = 1;
-    unsigned char reloj= 0;
+    unsigned char reloj = 1;
     unsigned indx = 0;
-    if (indx<8) return byte;
+    while (indx<8) {
+        if (reloj == 0){
 
-    else if (reloj == 0){
+        }
 
-    }
-
-    else if (reloj == 1){
-        //Leemos el bit -> 0b01 o 0b00 que esta llegando por el puerto digital
-        byte += lecBit;
-        byte = byte << 1;
-        indx+=1;
-    }
+        else if (reloj == 1){
+            lecBit = lectura & 0b10000000; //Leemos el bit -> 0b01 o 0b00 que esta llegando por el puerto digital
+            lectura = lectura << 1;
+            if (lecBit == 0b10000000){
+                lecBit = 1;
+            }
+            else lecBit = 0;
+            byte = byte << 1;
+            byte += lecBit;
+            indx+=1;
+        }
+    }return byte;
 }
