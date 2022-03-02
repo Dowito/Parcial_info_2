@@ -70,6 +70,7 @@ int main()
     for (unsigned long long i=0; arrDeco[i] != '\0';i++ ) {
         cout << (unsigned int)(arrDeco[i]) << ", ";
     }
+    cout << endl;
     return 0;
 }
 
