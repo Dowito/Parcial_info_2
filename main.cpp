@@ -47,17 +47,18 @@ Espera señal de reloj para recibir dicho bit
 
 int main()
 {
-    char byte = 0b10101010;
+    char arrBytes[] = {'A', 'B'};
     char *arrBits;
     unsigned char rBit;
     unsigned char arr2[] = {134,48,63,13,32,165,94};
     unsigned char tArrNum[] = {170,48,63,13,32,165,94,170,48,63,13,32,165,94,170,48,63,13,32,165,94,170,48,63,13,32,165,94,170,48,63,13,32,165,94,170,48,63,13,32,165,94,170,48,63,13,32,165,94,170,48,63,13,32,165,94,170,48,63,13,32,165,94,170,48,63,13,32,165,94,170,48,63,13,32,165,94,170,48,63,13,32,165,94,170,48,63,13,32,165,94,170,48,63,13,32,165,94};
-    serial74HC595(byte);
-    arrBits = getBits(&byte, 1);
+    unsigned char byte2;
+    serial74HC595(arrBytes[0]);
+    arrBits = getBits(arrBytes, 1);
 
     pruebaDesencript(32, 32);
     tArduino(arr2[0]);
-    byte = rArduino(arr2[0]);
+    byte2 = rArduino(arr2[0]);
     rBitArduino(rBit, 1);
 
     return 0;
