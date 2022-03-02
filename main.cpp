@@ -173,7 +173,9 @@ unsigned char *desencriptacion(char *arrBytes, bool *arrVali, unsigned long long
         if(arrVali[i]){
             if (i+3>=tam);//si se sale del arreglo
             else if(arrBytes[i+3]%2==0 | arrBytes[i+3]>0){
-                buffer[indx] = arrBytes[i+3];
+                buffer[indx] = arrBytes[i+1];
+                indx++;
+                buffer[indx] = arrBytes[i+2];
                 indx++;
             }
         }
