@@ -15,7 +15,7 @@ esto muy presente si se mandan de esta manera
 
 bool pruebaDesencript(char caracter, char bandera);
 /*
-Programa que simula el proceso de identificar la informacion verdadera o false,
+Programa que simula el proceso de identificar la informacion verdadera o falsa,
 recibe un numero (tipo char) y lo compara con la bandera.
 return True si son iguales, false de lo contrario
 */
@@ -62,10 +62,14 @@ int main()
     char numPrint4 = 0b10101010; //170
     char numPrint5 = 0b10011011; //155
     char numPrint6 = 0b01010010; //numero par 82
-    char tArrBytes[] = {numPrint1,numPrint2,numPrint3,numPrint4,numPrint5,numPrint6};
-    bool arrVali[] = {0,0,1,0,0,0};
-    unsigned long long tam = sizeof(tArrBytes);
-    unsigned char *arrDeco = desencriptacion(tArrBytes, arrVali, tam);
+    char ArrBytes[] = {numPrint1,numPrint2,numPrint3,numPrint4,numPrint5,numPrint6,numPrint3,numPrint6,numPrint2,numPrint4,numPrint3};
+    bool arrVali[] = {0,0,1,0,0,0,1,0,0,0,1};
+    unsigned long long tam = sizeof(ArrBytes);
+    unsigned char *arrDeco = desencriptacion(ArrBytes, arrVali, tam);
+    cout << "Los datos decodificados son: ";
+    for (unsigned long long i=0; arrDeco[i] != '\0';i++ ) {
+        cout << (unsigned int)(arrDeco[i]) << ", ";
+    }
     return 0;
 }
 
