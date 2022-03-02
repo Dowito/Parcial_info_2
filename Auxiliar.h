@@ -4,7 +4,7 @@
 #include <iostream>
 using namespace std;
 
-bool *getBits(char *cad, unsigned long long tamCad);
+char *getBits(char *cad, unsigned long long tamCad);
 /*
 *cad->Recibe una cadena de caracteres
 tamCad->Tamaño de cad

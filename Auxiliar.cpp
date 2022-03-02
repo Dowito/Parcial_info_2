@@ -1,10 +1,10 @@
-bool *getBits(char *cad, unsigned long long tamCad)
+char *getBits(char *cad, unsigned long long tamCad)
 {
     //unsigned long long tamCad = lenCad(cad);
-    bool *arrBits = new bool [8*tamCad]; //Los bits totales seran 8*tamCad
+    char *arrBits = new char [8*tamCad]; //Los bits totales seran 8*tamCad
     //Transformar cada char de cad en bits y guardarlos desde el mas al menos significativo
     unsigned long long indxBits = 0;
-    bool bit;//Se guardaran dia bit a bit
+    char bit;//Se guardaran dia bit a bit
     char copyChar;
     for (unsigned long long indxCad = 0; indxCad<tamCad; indxCad++) {
         copyChar = cad[indxCad]; //copia del Caracter al que le sacaremos los bits

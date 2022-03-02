@@ -47,14 +47,19 @@ Espera señal de reloj para recibir dicho bit
 
 int main()
 {
-    unsigned char byte = 'a';
+    char byte = 0b10101010;
+    char *arrBits;
     unsigned char rBit;
     unsigned char arr2[] = {134,48,63,13,32,165,94};
+    unsigned char tArrNum[] = {170,48,63,13,32,165,94,170,48,63,13,32,165,94,170,48,63,13,32,165,94,170,48,63,13,32,165,94,170,48,63,13,32,165,94,170,48,63,13,32,165,94,170,48,63,13,32,165,94,170,48,63,13,32,165,94,170,48,63,13,32,165,94,170,48,63,13,32,165,94,170,48,63,13,32,165,94,170,48,63,13,32,165,94,170,48,63,13,32,165,94,170,48,63,13,32,165,94};
     serial74HC595(byte);
+    arrBits = getBits(&byte, 1);
+
     pruebaDesencript(32, 32);
     tArduino(arr2[0]);
     byte = rArduino(arr2[0]);
     rBitArduino(rBit, 1);
+
     return 0;
 }
 
@@ -74,9 +79,9 @@ void serial74HC595(unsigned char byte){
 }
 
 bool pruebaDesencript(char caracter, char bandera){
-    bool *bits = getBits(&caracter,1);
-    bool *bitsBandera = getBits(&bandera,1);
-    bool outXOR[8];
+    char *bits = getBits(&caracter,1);
+    char *bitsBandera = getBits(&bandera,1);
+    char outXOR[8];
     for (short i=0;i<8;i++) {
         outXOR[i] = bits[i] ^ bitsBandera[i]; //Si todos los valores de outXOR son 0, los numeros son iguales
     }
