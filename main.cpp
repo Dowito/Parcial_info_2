@@ -45,24 +45,30 @@ Recibe un bit por un puerto digital.
 Espera señal de reloj para recibir dicho bit
 */
 
+unsigned char *desencriptacion(char *arrBytes, bool *arrVali, unsigned long long tam);
+/*
+arrBytes->Arreglo de bytes encriptados
+arrVali->Arreglo de boleano necesario para la clasificacion de la informacion
+tam->tamaño de arrBytes/arrVali
+returna un arreglo con la informacion desencriptada
+*/
+
 int main()
 {
-    char arrBytes[] = {'A', 'B'};
-    char *arrBits;
-    unsigned char rBit;
-    unsigned char arr2[] = {134,48,63,13,32,165,94};
-    unsigned char tArrNum[] = {170,48,63,13,32,165,94,170,48,63,13,32,165,94,170,48,63,13,32,165,94,170,48,63,13,32,165,94,170,48,63,13,32,165,94,170,48,63,13,32,165,94,170,48,63,13,32,165,94,170,48,63,13,32,165,94,170,48,63,13,32,165,94,170,48,63,13,32,165,94,170,48,63,13,32,165,94,170,48,63,13,32,165,94,170,48,63,13,32,165,94,170,48,63,13,32,165,94};
-    unsigned char byte2;
-    serial74HC595(arrBytes[0]);
-    arrBits = getBits(arrBytes, 1);
-
-    pruebaDesencript(32, 32);
-    tArduino(arr2[0]);
-    byte2 = rArduino(arr2[0]);
-    rBitArduino(rBit, 1);
-
+    //Decodificacion de los datos obtenido del arduino
+    char numPrint1 = 0b10011011; //155
+    char numPrint2 = 0b10000001; //129
+    char numPrint3 = 0b00001010; //clave=10
+    char numPrint4 = 0b10101010; //170
+    char numPrint5 = 0b10011011; //155
+    char numPrint6 = 0b01010010; //numero par 82
+    char tArrBytes[] = {numPrint1,numPrint2,numPrint3,numPrint4,numPrint5,numPrint6};
+    bool arrVali[] = {0,0,1,0,0,0};
+    unsigned long long tam = sizeof(tArrBytes);
+    unsigned char *arrDeco = desencriptacion(tArrBytes, arrVali, tam);
     return 0;
 }
+
 
 void serial74HC595(unsigned char byte){
     unsigned char bit;
@@ -152,4 +158,26 @@ void rBitArduino(unsigned char &rBit, unsigned char tBit)
         reloj = 1; //digitalRead(reloj)
     }
     rBit = tBit; //digiralRead(data)
+}
+
+unsigned char *desencriptacion(char *arrBytes, bool *arrVali, unsigned long long tam)
+{
+    //Los datos válidos son los dos siguientes a la clave, sólo cuando el tercer dato después de la clave es par.
+    unsigned char buffer[tam];
+    unsigned long long indx=0;
+    for (unsigned long long i=0; i<tam; i++) {
+        if(arrVali[i]){
+            if (i+3>=tam);//si se sale del arreglo
+            else if(arrBytes[i+3]%2==0 | arrBytes[i+3]>0){
+                buffer[indx] = arrBytes[i+3];
+                indx++;
+            }
+        }
+    }
+    unsigned char *arrDeco = new unsigned char [indx+1] {'\0'};
+    for (unsigned long long i=0; i<indx; i++) {
+        arrDeco[i] = buffer[i];
+    }
+
+    return arrDeco;
 }
